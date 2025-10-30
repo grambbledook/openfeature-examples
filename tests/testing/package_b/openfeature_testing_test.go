@@ -2,7 +2,6 @@ package package_b_test
 
 import (
 	"context"
-	"github.com/open-feature/go-sdk/openfeature"
 	"github.com/open-feature/go-sdk/openfeature/memprovider"
 	oft "openfeature-tests"
 	"testing"
@@ -29,17 +28,12 @@ func TestOne_PackageA(t *testing.T) {
 
 	provider.UsingFlags(t, testFlags)
 
-	err := openfeature.SetProviderAndWait(provider)
-	if err != nil {
-		t.Fatalf("failed to set provider: %v", err)
-	}
-
 	latchTestB.CountDown()
 	latchTestA.Wait()
 
 	serviceA := oft.NewService(oft.FlagServiceAEnabled)
 
-	if err = serviceA.Serve(context.Background()); err != nil {
+	if err := serviceA.Serve(context.Background()); err != nil {
 		t.Fatalf("failed to serve: %v", err)
 	}
 }
@@ -53,10 +47,6 @@ func TestTwo_PackageB(t *testing.T) {
 	}
 
 	provider.UsingFlags(t, testFlags)
-
-	if err := openfeature.SetProviderAndWait(provider); err != nil {
-		t.Fatalf("failed to set provider: %v", err)
-	}
 
 	latchTestA.CountDown()
 	serviceB := oft.NewService(oft.FlagServiceBEnabled)
